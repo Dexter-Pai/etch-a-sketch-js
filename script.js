@@ -5,6 +5,10 @@ console.log(viewport)
 const container = document.createElement('div');
 
 
+// main array
+let pixels = [];
+
+
 // manipulating container for etch-a-sketch
 function makeContainer() {
     viewport.appendChild(container);
@@ -13,8 +17,22 @@ function makeContainer() {
 }
 makeContainer();
 
+// making pixel grid
+for (let i = 0; i < 16; i++) {
+    let pixel = [];
+    for (let j = 0; j < 16; j++) {
+        let tmp = document.createElement('div');
+        tmp.setAttribute('id', 'div_' + i + '_' + j);
+        pixel[j] = tmp;
+    }
+    pixels[i] = pixel;
+}
 
+console.log(pixels);
 // media queries
+// -----------------------------------------------
+// todo: change size of pixels as well
+// -----------------------------------------------
 const notepadSizeChange = (() => {
 
     // mobile phone
