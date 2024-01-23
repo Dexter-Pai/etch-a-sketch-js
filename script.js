@@ -4,21 +4,25 @@ const viewport = document.querySelectorAll('.viewport')[0];
 const container = document.createElement('div');
 
 // Settings
-const pixelSetting = {
-    numberOfGridsX: 16,
-    numberOfGridsY: 16,
-    gridXWidth: 16,
-    gridYWidth: 16,
-}
+const padding = 20 + 20;
+const pixelSetting = {}
+pixelSetting.gridWidthX = 10;
+pixelSetting.gridHeightY = 10;
+pixelSetting.border = 'none';
 
 const containerSetting = {
-    width: pixelSetting.numberOfGridsX * pixelSetting.gridXWidth,
-    height: pixelSetting.numberOfGridsY * pixelSetting.gridYWidth,
+    // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
+    width: (viewport.clientWidth - padding) - ((viewport.clientWidth - padding) % pixelSetting.gridWidthX),
+    // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
+    height: (viewport.clientHeight - padding) - ((viewport.clientHeight - padding) % pixelSetting.gridHeightY),
     display: 'block',
-    border: 'none',
+    border: '5px solid black',
 }
 
-let color = 'green';
+pixelSetting.numberOfGridsX = containerSetting.width / pixelSetting.gridWidthX;
+pixelSetting.numberOfGridsY = containerSetting.height/ pixelSetting.gridHeightY;
+
+let color = 'red';
 // console.log((viewport.clientWidth - 40)%4);
 // console.log(viewport.clientHeight);
 // console.log(window.innerWidth);
@@ -40,7 +44,7 @@ function makeContainer() {
 makeContainer();
 
 // making pixel grid
-function makePixelGrid(numberOfGridsX, numberOfGridsY, gridXWidth, gridYWidth) {
+function makePixelGrid(numberOfGridsX, numberOfGridsY, gridWidthX, gridHeightY) {
 
     // columns
     for (let i = 0; i < numberOfGridsY; i++) {
@@ -50,13 +54,13 @@ function makePixelGrid(numberOfGridsX, numberOfGridsY, gridXWidth, gridYWidth) {
         for (let j = 0; j < numberOfGridsX; j++) {
             let tmp = document.createElement('div');
             tmp.setAttribute('id', 'pixel_' + i + '_' + j);
-            tmp.style.cssText = `height: ${gridXWidth}px; width: ${gridYWidth}px; border: 1px black solid;`
+            tmp.style.cssText = `height: ${gridWidthX}px; width: ${gridHeightY}px; border: ${pixelSetting.border};`
             pixel[j] = tmp;
         }
         pixels[i] = pixel;
     }
 }
-makePixelGrid(pixelSetting.numberOfGridsX, pixelSetting.numberOfGridsY, pixelSetting.gridXWidth, pixelSetting.gridYWidth);
+makePixelGrid(pixelSetting.numberOfGridsX, pixelSetting.numberOfGridsY, pixelSetting.gridWidthX, pixelSetting.gridHeightY);
 
 const appendPixel = (() => {
     for (let i = 0; i < pixels.length; i++) {
