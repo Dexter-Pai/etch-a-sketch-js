@@ -1,7 +1,6 @@
 // DOM elements
 const body = document.body;
 const viewport = document.querySelectorAll('.viewport')[0];
-console.log(viewport)
 const container = document.createElement('div');
 
 // Settings
@@ -11,21 +10,32 @@ const pixelSetting = {
     gridXWidth: 16,
     gridYWidth: 16,
 }
-let containerCss = {
+
+const containerSetting = {
     width: pixelSetting.numberOfGridsX * pixelSetting.gridXWidth,
     height: pixelSetting.numberOfGridsY * pixelSetting.gridYWidth,
-    display: 'block'
+    display: 'block',
+    border: 'none',
 }
 
+let color = 'green';
+// console.log((viewport.clientWidth - 40)%4);
+// console.log(viewport.clientHeight);
+// console.log(window.innerWidth);
+// console.log(window.innerHeight);
+
+
 // Array
-let pixels = [];
+const pixels = [];
+let mousedown = false;
 
 
 // manipulating container for etch-a-sketch
 function makeContainer() {
     viewport.appendChild(container);
     container.setAttribute('id', 'container');
-    container.style.cssText = `width: ${containerCss.width}px; height: ${containerCss.height}px; flex-shrink: 0; border: 1px solid black; display: flex: overflow-x : scroll;`;
+    container.style.cssText = `width: ${containerSetting.width}px; height: ${containerSetting.height}px; 
+    flex-shrink: 0; border: ${containerSetting.border}; `;
 }
 makeContainer();
 
@@ -61,11 +71,18 @@ const appendPixel = (() => {
     }
 })();
 
+
 // individual pixel event handler
 function gridEvents(pixelObject) {
-    pixelObject.addEventListener('click', (e) => {
-        console.log(e);
+    pixelObject.addEventListener('mouseenter', (e) => {
+        if (mousedown) {
+            e.target.style.backgroundColor = color;
+        }
     })
+    pixelObject.addEventListener('mousedown', (e) => {
+        e.target.style.backgroundColor = color;
+    })
+
 }
 const addGridEventsHandler = (() => {
     for (let i = 0; i < pixels.length; i++) {
@@ -76,8 +93,15 @@ const addGridEventsHandler = (() => {
     }
 })();
 
-//debug
-// console.log(pixels[0]);
+
+// window events
+window.addEventListener('mousedown', (e) => {
+    mousedown = true;
+})
+window.addEventListener('mouseup', (e) => {
+    mousedown = false;
+})
+
 
 
 // media queries
