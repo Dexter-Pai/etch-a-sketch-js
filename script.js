@@ -2,38 +2,49 @@
 const body = document.body;
 const viewport = document.querySelectorAll('.viewport')[0];
 const container = document.createElement('div');
+const toolBar = document.createElement('div');
 
 // Settings
 const padding = 20 + 20;
 
-const pixelSetting = {}
-pixelSetting.gridWidthX = 40;
-pixelSetting.gridHeightY = 40;
-pixelSetting.border = 'black solid 1px;';
-pixelSetting.borderRadius = '5px;'
+const colorPalette = ['red', 'blue', 'green', 'rainbow']
 
-// These settings are to be used when you want full screen etch-a-sketch pad
+// different settings left behind for further reference
 // const containerSetting = {
 //     // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
-//     width: (viewport.clientWidth - padding) - ((viewport.clientWidth - padding) % pixelSetting.gridWidthX),
+//     // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
+//     //width: (viewport.clientWidth - padding) - ((viewport.clientWidth - padding) % pixelSetting.gridWidthX),
 //     // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
-//     height: (viewport.clientHeight - padding) - ((viewport.clientHeight - padding) % pixelSetting.gridHeightY),
+//     // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
+//     //height: (viewport.clientHeight - padding) - ((viewport.clientHeight - padding) % pixelSetting.gridHeightY),
 //     display: 'block',
 //     border: '5px solid black',
 // }
+
 const containerSetting = {
-    width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
-    height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
+    width: 600,
+    height: 600,
     display: 'block',
-    border: '5px solid black',
+    border: '',
+    borderRadius: '',
+    padding: '',
+    backgroundColor: 'White',
+    boxShadow: `rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;`,
+    miscSettings: ``,
 }
+
+const pixelSetting = {}
+pixelSetting.numberOfGridsX = 78;
+pixelSetting.numberOfGridsY = 78;
+pixelSetting.gridWidthX = containerSetting.width / pixelSetting.numberOfGridsX;
+pixelSetting.gridHeightY = containerSetting.height / pixelSetting.numberOfGridsY;
+pixelSetting.border = '';
+pixelSetting.borderRadius = '',
+pixelSetting.miscSettings = ``;
 
 // These settings are to be used when you want full screen etch-a-sketch pad
 // pixelSetting.numberOfGridsX = containerSetting.width / pixelSetting.gridWidthX;
 // pixelSetting.numberOfGridsY = containerSetting.height/ pixelSetting.gridHeightY;
-
-pixelSetting.numberOfGridsX = 16;
-pixelSetting.numberOfGridsY = 16
 
 
 pixelSetting.color = 'red';
@@ -49,7 +60,9 @@ function makeContainer() {
     viewport.appendChild(container);
     container.setAttribute('id', 'container');
     container.style.cssText = `width: ${containerSetting.width}px; height: ${containerSetting.height}px; 
-    flex-shrink: 0; border: ${containerSetting.border}; `;
+    flex-shrink: 0; border: ${containerSetting.border}; border-radius: ${containerSetting.borderRadius}; 
+    padding: ${containerSetting.padding}; background-color:${containerSetting.backgroundColor};
+    box-shadow: ${containerSetting.boxShadow}; ${containerSetting.miscSettings};`;
 }
 makeContainer();
 
@@ -64,7 +77,7 @@ function makePixelGrid(numberOfGridsX, numberOfGridsY, gridWidthX, gridHeightY) 
         for (let j = 0; j < numberOfGridsX; j++) {
             let tmp = document.createElement('div');
             tmp.setAttribute('id', 'pixel_' + i + '_' + j);
-            tmp.style.cssText = `height: ${gridWidthX}px; width: ${gridHeightY}px; border: ${pixelSetting.border}; border-radius: ${pixelSetting.borderRadius}`
+            tmp.style.cssText = `height: ${gridWidthX}px; width: ${gridHeightY}px; border: ${pixelSetting.border}; border-radius: ${pixelSetting.borderRadius}; ${pixelSetting.miscSettings};`
             pixel[j] = tmp;
         }
         pixels[i] = pixel;
@@ -106,6 +119,15 @@ const addGridEventsHandler = (() => {
         });
     }
 })();
+
+// tool Bar
+function makeTools() {
+    viewport.appendChild(toolBar);
+    toolBar.setAttribute('id', 'toolBar')
+    toolBar.textContent = 'Test'
+
+}
+makeTools();
 
 
 // window events
