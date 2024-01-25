@@ -5,28 +5,38 @@ const container = document.createElement('div');
 
 // Settings
 const padding = 20 + 20;
-const pixelSetting = {}
-pixelSetting.gridWidthX = 10;
-pixelSetting.gridHeightY = 10;
-pixelSetting.border = 'none';
 
+const pixelSetting = {}
+pixelSetting.gridWidthX = 40;
+pixelSetting.gridHeightY = 40;
+pixelSetting.border = 'black solid 1px;';
+pixelSetting.borderRadius = '5px;'
+
+// These settings are to be used when you want full screen etch-a-sketch pad
+// const containerSetting = {
+//     // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
+//     width: (viewport.clientWidth - padding) - ((viewport.clientWidth - padding) % pixelSetting.gridWidthX),
+//     // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
+//     height: (viewport.clientHeight - padding) - ((viewport.clientHeight - padding) % pixelSetting.gridHeightY),
+//     display: 'block',
+//     border: '5px solid black',
+// }
 const containerSetting = {
-    // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
-    width: (viewport.clientWidth - padding) - ((viewport.clientWidth - padding) % pixelSetting.gridWidthX),
-    // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
-    height: (viewport.clientHeight - padding) - ((viewport.clientHeight - padding) % pixelSetting.gridHeightY),
+    width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
+    height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
     display: 'block',
     border: '5px solid black',
 }
 
-pixelSetting.numberOfGridsX = containerSetting.width / pixelSetting.gridWidthX;
-pixelSetting.numberOfGridsY = containerSetting.height/ pixelSetting.gridHeightY;
+// These settings are to be used when you want full screen etch-a-sketch pad
+// pixelSetting.numberOfGridsX = containerSetting.width / pixelSetting.gridWidthX;
+// pixelSetting.numberOfGridsY = containerSetting.height/ pixelSetting.gridHeightY;
 
-let color = 'red';
-// console.log((viewport.clientWidth - 40)%4);
-// console.log(viewport.clientHeight);
-// console.log(window.innerWidth);
-// console.log(window.innerHeight);
+pixelSetting.numberOfGridsX = 16;
+pixelSetting.numberOfGridsY = 16
+
+
+pixelSetting.color = 'red';
 
 
 // Array
@@ -54,7 +64,7 @@ function makePixelGrid(numberOfGridsX, numberOfGridsY, gridWidthX, gridHeightY) 
         for (let j = 0; j < numberOfGridsX; j++) {
             let tmp = document.createElement('div');
             tmp.setAttribute('id', 'pixel_' + i + '_' + j);
-            tmp.style.cssText = `height: ${gridWidthX}px; width: ${gridHeightY}px; border: ${pixelSetting.border};`
+            tmp.style.cssText = `height: ${gridWidthX}px; width: ${gridHeightY}px; border: ${pixelSetting.border}; border-radius: ${pixelSetting.borderRadius}`
             pixel[j] = tmp;
         }
         pixels[i] = pixel;
@@ -80,11 +90,11 @@ const appendPixel = (() => {
 function gridEvents(pixelObject) {
     pixelObject.addEventListener('mouseenter', (e) => {
         if (mousedown) {
-            e.target.style.backgroundColor = color;
+            e.target.style.backgroundColor = pixelSetting.color;
         }
     })
     pixelObject.addEventListener('mousedown', (e) => {
-        e.target.style.backgroundColor = color;
+        e.target.style.backgroundColor = pixelSetting.color;
     })
 
 }
