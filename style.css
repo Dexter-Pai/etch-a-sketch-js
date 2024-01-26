@@ -1,6 +1,7 @@
 * {
     margin: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 .viewport {
@@ -38,7 +39,7 @@
   }
 
 /* credit to 
- *
+ * https://codingartistweb.com/2021/09/styling-input-type-color-pure-css-tutorial/
  * for this amazing color input template
  */
 #colorPicker {
@@ -61,10 +62,49 @@
 }
 
 /* credit to 
+ * https://www.w3schools.com/howto/howto_js_rangeslider.asp
+ * for this amazing slider design
+ */
+ .slider {
+    appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;  
+    background: #fff;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    box-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    0 0 42px #0fa,
+    0 0 82px #0fa
+  }
+  
+  .slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 50px;
+    height: 20px;
+    border-radius: 10px; 
+    background: #000;
+    border: 1px black solid;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #000;
+    cursor: pointer;
+  }
+
+/* credit to 
  * https://getcssscan.com/
  * for this amazing button design
  */
-
 .toolBtn {
   background: #0fa;
   border: none;

@@ -7,6 +7,8 @@ const title = document.createElement('div');
 const container = document.createElement('div');
 const toolBar = document.createElement('div');
 const colorInput = document.createElement('input');
+const slider = document.createElement('input');
+const sliderBtn = document.createElement('button');
 
 // -----------------------------------------------
 // Settings
@@ -39,6 +41,13 @@ pixelSetting.borderRadius = '',
 pixelSetting.miscSettings = ``;
 pixelSetting.backgroundColor = 'black';
 
+const sliderSetting = {
+    min: 1,
+    max: 100,
+    value: 16,
+    width: 300,
+}
+
 // -----------------------------------------------
 // Functions
 // -----------------------------------------------
@@ -51,7 +60,7 @@ function makeTitle() {
     title.style.cssText = 'font-family: Arial, Helvetica, sans-serif; font-size: 50px; font-weight: bold;'
 }
 
-// manipulating container for etch-a-sketch
+// container for etch-a-sketch
 function makeContainer() {
     viewport.appendChild(container);
     container.setAttribute('id', 'container');
@@ -81,7 +90,9 @@ function makePixelGrid(numberOfGridsX, numberOfGridsY, gridWidthX, gridHeightY) 
 
 function appendPixel() {
     for (let i = 0; i < pixels.length; i++) {
+        rows = [];
         let div = document.createElement('div');
+        rows.push(div);
         div.setAttribute('class', 'row');
         div.setAttribute('id', 'row_' + i);
         div.style.cssText = 'display: flex;'
@@ -95,18 +106,20 @@ function appendPixel() {
 
 // individual pixel event handler
 function gridEvents(pixelObject) {
-    pixelObject.addEventListener('mouseenter', (e) => {
-        if (mousedown) {
-            if (rainbowClicked) randomizeColor();
-            e.target.style.backgroundColor = pixelSetting.backgroundColor;
-        }
-    })
-    pixelObject.addEventListener('mousedown', (e) => {
+    pixelObject.addEventListener('mouseenter', enterEvent);
+    pixelObject.addEventListener('mousedown', mousedownEvent);
+}
+function enterEvent(e){
+    if (mousedown) {
         if (rainbowClicked) randomizeColor();
         e.target.style.backgroundColor = pixelSetting.backgroundColor;
-    })
+    }
+};
+function mousedownEvent(e) {
+    if (rainbowClicked) randomizeColor();
+    e.target.style.backgroundColor = pixelSetting.backgroundColor;
+};
 
-}
 function addGridEventsHandler() {
     for (let i = 0; i < pixels.length; i++) {
         pixels[i].forEach(element => {
@@ -115,7 +128,28 @@ function addGridEventsHandler() {
     }
 };
 
-// tool Bar
+// slider
+function makeSlider() {
+    let div = document.createElement('div');
+    div.style.cssText = 'display: flex; flex-direction: column; margin: 15px; gap: 15px;'
+    viewport.appendChild(div);
+    div.appendChild(slider);
+    div.appendChild(sliderBtn);
+
+    // slider
+    slider.setAttribute('type', 'range');
+    slider.setAttribute('class', 'slider');
+    slider.setAttribute('min', `${sliderSetting.min}`);
+    slider.setAttribute('max', `${sliderSetting.max}`);
+    slider.setAttribute('value', `${sliderSetting.value}`);
+    slider.style.width = `${sliderSetting.width}px`;
+
+    // slider Button
+    sliderBtn.textContent = 'Change Grid Size';
+    sliderBtn.setAttribute('class', 'toolBtn');
+}
+
+// toolbar
 function makeTools() {
     viewport.appendChild(toolBar);
     toolBar.setAttribute('id', 'toolBar')
@@ -178,13 +212,38 @@ function toolEvents() {
         pixelSetting.backgroundColor = colorInput.value;
         rainbowClicked = false;
     });
-    
 }
 
-//randomize color
+// slider event listener
+function sliderEvents() {
+    sliderBtn.addEventListener('click', () => {
+        removeEvents();
+        pixelSetting.numberOfGridsX = slider.value;
+        pixelSetting.numberOfGridsY = slider.value;
+        pixelSetting.gridWidthX = containerSetting.width / pixelSetting.numberOfGridsX;
+        pixelSetting.gridHeightY = containerSetting.height / pixelSetting.numberOfGridsY;
+        buttons[4][3].click();
+        makePixelGrid(pixelSetting.numberOfGridsX, pixelSetting.numberOfGridsY, pixelSetting.gridWidthX, pixelSetting.gridHeightY);
+        container.replaceChildren();
+        appendPixel();
+        addGridEventsHandler();
+    })
+}
+
+// randomize color
 function randomizeColor() {
     pixelSetting.backgroundColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
 };
+
+// removing event listeners
+function removeEvents() {
+    pixels.forEach(row => {
+        row.forEach(pixel => {
+    pixel.removeEventListener('mouseenter', enterEvent);
+    pixel.removeEventListener('mousedown', mousedownEvent);
+        })
+    })
+}
 
 
 // window events
@@ -203,10 +262,12 @@ function initialize() {
     makePixelGrid(pixelSetting.numberOfGridsX, pixelSetting.numberOfGridsY, pixelSetting.gridWidthX, pixelSetting.gridHeightY);
     appendPixel();
     addGridEventsHandler();
+    makeSlider();
     makeTools();
     populateTools();
     toolEvents();
     makeColorInput();
+    sliderEvents();
 }
 
 initialize();
@@ -214,8 +275,7 @@ initialize();
 
 
 // -----------------------------------------------
-// todo: change size of pixels as well
-// todo: add functionality for removing event handlers when pixels are changed
+// todo: media queries
 // -----------------------------------------------
 
 
