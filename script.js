@@ -1,25 +1,19 @@
+// -----------------------------------------------
 // DOM elements
+// -----------------------------------------------
 const body = document.body;
 const viewport = document.querySelectorAll('.viewport')[0];
 const container = document.createElement('div');
 const toolBar = document.createElement('div');
 
+// -----------------------------------------------
 // Settings
-const padding = 20 + 20;
+// -----------------------------------------------
+let pixels = [];
+let mousedown = false;
 
-const colorPalette = ['red', 'blue', 'green', 'rainbow']
-
-// different settings left behind for further reference
-// const containerSetting = {
-//     // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
-//     // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
-//     //width: (viewport.clientWidth - padding) - ((viewport.clientWidth - padding) % pixelSetting.gridWidthX),
-//     // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
-//     // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
-//     //height: (viewport.clientHeight - padding) - ((viewport.clientHeight - padding) % pixelSetting.gridHeightY),
-//     display: 'block',
-//     border: '5px solid black',
-// }
+let colorPalette = ['red', 'blue', 'green', 'rainbow']
+const buttons = ['Rainbow', 'Random', 'Eraser', 'Clear', 'Choose Color']
 
 const containerSetting = {
     width: 600,
@@ -41,19 +35,11 @@ pixelSetting.gridHeightY = containerSetting.height / pixelSetting.numberOfGridsY
 pixelSetting.border = '';
 pixelSetting.borderRadius = '',
 pixelSetting.miscSettings = ``;
-
-// These settings are to be used when you want full screen etch-a-sketch pad
-// pixelSetting.numberOfGridsX = containerSetting.width / pixelSetting.gridWidthX;
-// pixelSetting.numberOfGridsY = containerSetting.height/ pixelSetting.gridHeightY;
-
-
 pixelSetting.color = 'red';
 
-
-// Array
-const pixels = [];
-let mousedown = false;
-
+// -----------------------------------------------
+// Functions
+// -----------------------------------------------
 
 // manipulating container for etch-a-sketch
 function makeContainer() {
@@ -64,11 +50,10 @@ function makeContainer() {
     padding: ${containerSetting.padding}; background-color:${containerSetting.backgroundColor};
     box-shadow: ${containerSetting.boxShadow}; ${containerSetting.miscSettings};`;
 }
-makeContainer();
 
 // making pixel grid
 function makePixelGrid(numberOfGridsX, numberOfGridsY, gridWidthX, gridHeightY) {
-
+    pixels = [];
     // columns
     for (let i = 0; i < numberOfGridsY; i++) {
         let pixel = [];
@@ -83,9 +68,8 @@ function makePixelGrid(numberOfGridsX, numberOfGridsY, gridWidthX, gridHeightY) 
         pixels[i] = pixel;
     }
 }
-makePixelGrid(pixelSetting.numberOfGridsX, pixelSetting.numberOfGridsY, pixelSetting.gridWidthX, pixelSetting.gridHeightY);
 
-const appendPixel = (() => {
+function appendPixel() {
     for (let i = 0; i < pixels.length; i++) {
         let div = document.createElement('div');
         div.setAttribute('class', 'row');
@@ -96,7 +80,7 @@ const appendPixel = (() => {
             div.appendChild(element);
         });
     }
-})();
+};
 
 
 // individual pixel event handler
@@ -111,14 +95,14 @@ function gridEvents(pixelObject) {
     })
 
 }
-const addGridEventsHandler = (() => {
+function addGridEventsHandler() {
     for (let i = 0; i < pixels.length; i++) {
         pixels[i].forEach(element => {
             // console.log(element);
             gridEvents(element);
         });
     }
-})();
+};
 
 // tool Bar
 function makeTools() {
@@ -127,7 +111,15 @@ function makeTools() {
     toolBar.textContent = 'Test'
 
 }
-makeTools();
+
+function populateTools() {
+    let buttonsArray = []
+    buttons.forEach(function(value, index, array) {
+        btn = document.createElement('button');
+        toolBar.appendChild(btn);
+        // todo
+    })
+}
 
 
 // window events
@@ -139,11 +131,39 @@ window.addEventListener('mouseup', (e) => {
 })
 
 
+// Initialization main function
+function initialize() {
+    makeContainer();
+    makePixelGrid(pixelSetting.numberOfGridsX, pixelSetting.numberOfGridsY, pixelSetting.gridWidthX, pixelSetting.gridHeightY);
+    appendPixel();
+    addGridEventsHandler();
+    makeTools();
+}
 
-// media queries
+initialize();
+
+
+
 // -----------------------------------------------
 // todo: change size of pixels as well
+// todo: add functionality for removing event handlers when pixels are changed
 // -----------------------------------------------
+
+
+// different settings left behind for further reference
+// const containerSetting = {
+//     // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
+//     // width: pixelSetting.numberOfGridsX * pixelSetting.gridWidthX,
+//     //width: (viewport.clientWidth - padding) - ((viewport.clientWidth - padding) % pixelSetting.gridWidthX), // fullscreen
+//     // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
+//     // height: pixelSetting.numberOfGridsY * pixelSetting.gridHeightY,
+//     //height: (viewport.clientHeight - padding) - ((viewport.clientHeight - padding) % pixelSetting.gridHeightY), // fullscreen
+//     display: 'block',
+//     border: '5px solid black',
+// }
+
+
+// media queries
 // const notepadSizeChange = (() => {
 
 //     // mobile phone
