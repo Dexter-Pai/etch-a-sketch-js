@@ -11,6 +11,7 @@ const toolBar = document.createElement('div');
 // -----------------------------------------------
 let pixels = [];
 let mousedown = false;
+let rainbowClicked = false;
 
 let colorPalette = ['red', 'blue', 'green', 'rainbow']
 const buttons = ['Rainbow', 'Random', 'Eraser', 'Clear', 'Choose Color']
@@ -28,14 +29,14 @@ const containerSetting = {
 }
 
 const pixelSetting = {}
-pixelSetting.numberOfGridsX = 78;
-pixelSetting.numberOfGridsY = 78;
+pixelSetting.numberOfGridsX = 16;
+pixelSetting.numberOfGridsY = 16;
 pixelSetting.gridWidthX = containerSetting.width / pixelSetting.numberOfGridsX;
 pixelSetting.gridHeightY = containerSetting.height / pixelSetting.numberOfGridsY;
 pixelSetting.border = '';
 pixelSetting.borderRadius = '',
 pixelSetting.miscSettings = ``;
-pixelSetting.color = 'red';
+pixelSetting.backgroundColor = 'darkgrey';
 
 // -----------------------------------------------
 // Functions
@@ -87,18 +88,19 @@ function appendPixel() {
 function gridEvents(pixelObject) {
     pixelObject.addEventListener('mouseenter', (e) => {
         if (mousedown) {
-            e.target.style.backgroundColor = pixelSetting.color;
+            if (rainbowClicked) randomizeColor();
+            e.target.style.backgroundColor = pixelSetting.backgroundColor;
         }
     })
     pixelObject.addEventListener('mousedown', (e) => {
-        e.target.style.backgroundColor = pixelSetting.color;
+        if (rainbowClicked) randomizeColor();
+        e.target.style.backgroundColor = pixelSetting.backgroundColor;
     })
 
 }
 function addGridEventsHandler() {
     for (let i = 0; i < pixels.length; i++) {
         pixels[i].forEach(element => {
-            // console.log(element);
             gridEvents(element);
         });
     }
@@ -108,18 +110,67 @@ function addGridEventsHandler() {
 function makeTools() {
     viewport.appendChild(toolBar);
     toolBar.setAttribute('id', 'toolBar')
-    toolBar.textContent = 'Test'
-
 }
-
 function populateTools() {
     let buttonsArray = []
-    buttons.forEach(function(value, index, array) {
+    buttons.forEach(function(value) {
         btn = document.createElement('button');
         toolBar.appendChild(btn);
+        btn.textContent = value;
+        buttonsArray.push(btn);
         // todo
     })
+    buttons.push(buttonsArray);
+    console.log(buttons);
 }
+
+// tool event handlers
+function toolEvents() {
+
+    // rainbow button
+    buttons[5][0].addEventListener('click', () => {
+        console.log('rainbow');
+        rainbowClicked = true;
+    });
+    
+    // random button
+    buttons[5][1].addEventListener('click', () => {
+        randomizeColor();
+        console.log('random');
+        rainbowClicked = false;
+    });
+    
+    // eraser button
+    buttons[5][2].addEventListener('click', () => {
+        pixelSetting.backgroundColor = 'white';
+        console.log('eraser');
+        rainbowClicked = false;
+    });
+    
+    // clear button
+    buttons[5][3].addEventListener('click', () => {
+        pixels.forEach(row => {
+            row.forEach(pixel => {
+                pixel.style.backgroundColor = 'white';
+            })            
+        });
+        console.log(pixels);
+        console.log('clear');
+        rainbowClicked = false;
+    });
+    
+    // choose color button
+    buttons[5][4].addEventListener('click', () => {
+        console.log('choose color');
+        rainbowClicked = false;
+    });
+    
+}
+
+//randomize color
+function randomizeColor() {
+    pixelSetting.backgroundColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
+};
 
 
 // window events
@@ -138,6 +189,8 @@ function initialize() {
     appendPixel();
     addGridEventsHandler();
     makeTools();
+    populateTools();
+    toolEvents();
 }
 
 initialize();
