@@ -11,7 +11,91 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     background-color: #abb8c3;
+}
+
+#toolBar > * {
+    margin: 5px;
+}
+
+/* credit to 
+ * https://css-tricks.com/how-to-create-neon-text-with-css/
+ * for this amazing color input template
+ */
+#title {
+    color: black;
+    text-shadow:
+        0 0 7px #fff,
+        0 0 10px #fff,
+        0 0 21px #fff,
+        0 0 42px #0fa,
+        0 0 82px #0fa,
+        0 0 92px #0fa,
+        0 0 102px #0fa,
+        0 0 151px #0fa;
+  }
+
+/* credit to 
+ *
+ * for this amazing color input template
+ */
+#colorPicker {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+#colorPicker::-webkit-color-swatch {
+  border-radius: 15px;
+  border: none;
+}
+#colorPicker::-moz-color-swatch {
+  border-radius: 15px;
+  border: none;
+}
+
+/* credit to 
+ * https://getcssscan.com/
+ * for this amazing button design
+ */
+
+.toolBtn {
+  background: #0fa;
+  border: none;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+  color: #000;
+  cursor: pointer;
+  display: inline-block;
+  font-family: nunito,roboto,proxima-nova,"proxima nova",sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 16px;
+  min-height: 40px;
+  outline: 0;
+  padding: 12px 14px;
+  text-align: center;
+  text-rendering: geometricprecision;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+}
+
+.toolBtn:hover,
+.toolBtn:active {
+  background-color: orange;
+  background-position: 0 0;
+  color: #fff;
+}
+
+.toolBtn:active {
+  opacity: .5;
 }

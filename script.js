@@ -3,8 +3,10 @@
 // -----------------------------------------------
 const body = document.body;
 const viewport = document.querySelectorAll('.viewport')[0];
+const title = document.createElement('div');
 const container = document.createElement('div');
 const toolBar = document.createElement('div');
+const colorInput = document.createElement('input');
 
 // -----------------------------------------------
 // Settings
@@ -13,8 +15,7 @@ let pixels = [];
 let mousedown = false;
 let rainbowClicked = false;
 
-let colorPalette = ['red', 'blue', 'green', 'rainbow']
-const buttons = ['Rainbow', 'Random', 'Eraser', 'Clear', 'Choose Color']
+const buttons = ['Rainbow', 'Random', 'Eraser', 'Clear']
 
 const containerSetting = {
     width: 600,
@@ -36,11 +37,19 @@ pixelSetting.gridHeightY = containerSetting.height / pixelSetting.numberOfGridsY
 pixelSetting.border = '';
 pixelSetting.borderRadius = '',
 pixelSetting.miscSettings = ``;
-pixelSetting.backgroundColor = 'darkgrey';
+pixelSetting.backgroundColor = 'black';
 
 // -----------------------------------------------
 // Functions
 // -----------------------------------------------
+
+// create title
+function makeTitle() {
+    viewport.appendChild(title);
+    title.setAttribute('id', 'title');
+    title.textContent = 'Etch - A - Sketch';
+    title.style.cssText = 'font-family: Arial, Helvetica, sans-serif; font-size: 50px; font-weight: bold;'
+}
 
 // manipulating container for etch-a-sketch
 function makeContainer() {
@@ -116,52 +125,57 @@ function populateTools() {
     buttons.forEach(function(value) {
         btn = document.createElement('button');
         toolBar.appendChild(btn);
+        btn.setAttribute('class', 'toolBtn')
         btn.textContent = value;
+        btn.style.width = '150px';
         buttonsArray.push(btn);
-        // todo
     })
     buttons.push(buttonsArray);
-    console.log(buttons);
+}
+
+// color input
+function makeColorInput() {
+    toolBar.appendChild(colorInput);
+    colorInput.setAttribute('class', 'toolBtn');
+    colorInput.setAttribute('type', 'color');
+    colorInput.setAttribute('id', 'colorPicker');
+    colorInput.style.boxShadow = 'none';
 }
 
 // tool event handlers
 function toolEvents() {
 
     // rainbow button
-    buttons[5][0].addEventListener('click', () => {
-        console.log('rainbow');
+    buttons[4][0].addEventListener('click', () => {
         rainbowClicked = true;
     });
     
     // random button
-    buttons[5][1].addEventListener('click', () => {
+    buttons[4][1].addEventListener('click', () => {
         randomizeColor();
-        console.log('random');
         rainbowClicked = false;
     });
     
     // eraser button
-    buttons[5][2].addEventListener('click', () => {
+    buttons[4][2].addEventListener('click', () => {
         pixelSetting.backgroundColor = 'white';
-        console.log('eraser');
         rainbowClicked = false;
     });
     
     // clear button
-    buttons[5][3].addEventListener('click', () => {
+    buttons[4][3].addEventListener('click', () => {
         pixels.forEach(row => {
             row.forEach(pixel => {
                 pixel.style.backgroundColor = 'white';
             })            
         });
-        console.log(pixels);
-        console.log('clear');
+        if (pixelSetting.backgroundColor === 'white') pixelSetting.backgroundColor = 'black';
         rainbowClicked = false;
     });
     
     // choose color button
-    buttons[5][4].addEventListener('click', () => {
-        console.log('choose color');
+    colorInput.addEventListener('change', () => {
+        pixelSetting.backgroundColor = colorInput.value;
         rainbowClicked = false;
     });
     
@@ -184,6 +198,7 @@ window.addEventListener('mouseup', (e) => {
 
 // Initialization main function
 function initialize() {
+    makeTitle();
     makeContainer();
     makePixelGrid(pixelSetting.numberOfGridsX, pixelSetting.numberOfGridsY, pixelSetting.gridWidthX, pixelSetting.gridHeightY);
     appendPixel();
@@ -191,6 +206,7 @@ function initialize() {
     makeTools();
     populateTools();
     toolEvents();
+    makeColorInput();
 }
 
 initialize();
